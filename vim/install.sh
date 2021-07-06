@@ -6,12 +6,17 @@ if ! command -v vim >/dev/null 2>&1; then
 	echo '!! CONTINUING ANYWAY' >&2
 fi
 
-cp .vimrc ~/.vimrc
+# Create .vimrc file
+true > ~/.vimrc
+cat heavy.vimrc >> ~/.vimrc
+
 # install plug
 plug_dir=~/.vim/autoload
-mkdir -p $plug_dir
-curl -fLo $plug_dir/plug.vim \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+if ! [ -f $plug_dir/plug.vim ]; then
+	mkdir -p $plug_dir
+	curl -fLo $plug_dir/plug.vim \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
 
 if command -v nvim >/dev/null 2>&1; then
 	mkdir -p ~/.config/nvim

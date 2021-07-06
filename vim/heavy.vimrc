@@ -41,7 +41,8 @@ set wrap
 set breakindent
 set breakindentopt=shift:2,sbr
 set linebreak
-let &showbreak='-  '
+set showbreak=↪\ 
+set listchars=tab:»\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 
 " Autosave removes the need for swap files
 set noswapfile

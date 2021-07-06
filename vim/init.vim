@@ -20,7 +20,7 @@ set foldlevel=99
 set foldcolumn=1
 
 " Neovim terminal settings
-autocmd TermOpen * setlocal listchars= nonumber norelativenumber
+autocmd TermOpen * setlocal nonumber norelativenumber
 tnoremap kj <C-\><C-n>
 tmap <C-W> <C-\><C-n><C-W>
 
