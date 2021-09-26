@@ -1,4 +1,6 @@
 
+set encoding=utf-8
+
 filetype plugin indent on
 syntax enable
 set number 		" line numbers
@@ -61,24 +63,13 @@ vnoremap <down> g<down>
 augroup vimrc
 	autocmd!
 	set updatetime=700
-	autocmd CursorHold,CursorHoldI * update
+	autocmd CursorHold,CursorHoldI * silent! update
 augroup end
-
-" Filetype specific settings
-autocmd Filetype typescript setlocal expandtab shiftwidth=2 tabstop=2
-autocmd Filetype javascript setlocal expandtab shiftwidth=2 tabstop=2
-
-autocmd Filetype elm setlocal expandtab shiftwidth=2 tabstop=2
 
 
 call plug#begin('~/vimfiles/plugged')
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-Plug 'kien/ctrlp.vim'
-
-Plug 'leafgarland/typescript-vim'
+source ~/.plugins.vim
 
 call plug#end()
 

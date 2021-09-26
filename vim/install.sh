@@ -8,7 +8,22 @@ fi
 
 # Create .vimrc file
 true > ~/.vimrc
+true > ~/.plugins.vim
 cat heavy.vimrc >> ~/.vimrc
+cat plugins.vim >> ~/.plugins.vim
+
+mkdir -p ~/vimfiles/backup
+mkdir -p ~/vimfiles/undo
+
+# Powerline symbols for zsh only
+if [ -f ~/.zshrc ]; then
+	echo 'let g:airline_powerline_fonts = 1' >> ~/.vimrc
+fi
+
+# Languages
+# TODO would be nice to be able to toggle these
+cat lang/typescript.vim >> ~/.vimrc
+cat lang/typescript.plugins.vim >> ~/.plugins.vim
 
 # install plug
 plug_dir=~/.vim/autoload
