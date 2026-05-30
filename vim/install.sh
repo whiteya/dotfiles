@@ -1,50 +1,68 @@
 #!/bin/sh
 cd $(dirname $0)
 
-if ! command -v vim >/dev/null 2>&1; then
-	echo '!! VIM NOT FOUND' >&2
-	echo '!! CONTINUING ANYWAY' >&2
-fi
-
-# Create .vimrc file
-true > ~/.vimrc
-true > ~/.plugins.vim
-cat heavy.vimrc >> ~/.vimrc
-cat plugins.vim >> ~/.plugins.vim
-
 mkdir -p ~/vimfiles/backup
 mkdir -p ~/vimfiles/undo
 
-# Powerline symbols for zsh only
-if [ -f ~/.zshrc ]; then
-	echo 'let g:airline_powerline_fonts = 1' >> ~/.vimrc
-fi
-
-# Languages
-# TODO would be nice to be able to toggle these
-cat lang/typescript.vim >> ~/.vimrc
-cat lang/typescript.plugins.vim >> ~/.plugins.vim
-
-# install plug
-plug_dir=~/.vim/autoload
-if ! [ -f $plug_dir/plug.vim ]; then
-	mkdir -p $plug_dir
-	curl -fLo $plug_dir/plug.vim \
-		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-if command -v nvim >/dev/null 2>&1; then
-	mkdir -p ~/.config/nvim
-	cp init.vim ~/.config/nvim/
-	nvim_plug_dir=~/.local/share/nvim/site/autoload
-	mkdir -p $nvim_plug_dir
-	cp $plug_dir/plug.vim $nvim_plug_dir
-fi
-
 if ! grep 'EDITOR=vim' ~/.bash_aliases >/dev/null 2>&1; then
-	echo 'export EDITOR=vim' >> ~/.bash_aliases
+  echo 'export EDITOR=vim' >> ~/.bash_aliases
 fi
+
+if [ "$1" = "basic" ]; then
+  # Minimal vim-compatible install — no plugins
+  cp basic.vimrc ~/.vimrc
+  echo 'Basic vim config installed to ~/.vimrc'
+  exit 0
+fi
+
+# Full neovim Lua install
+if ! command -v nvim >/dev/null 2>&1; then
+  echo '!! NVIM NOT FOUND' >&2
+  echo '!! CONTINUING ANYWAY' >&2
+fi
+
+mkdir -p ~/.config/nvim
+rm -f ~/.config/nvim/init.vim
+cp -r nvim/. ~/.config/nvim/
 
 if ! grep 'Session.vim' ~/.gitignore >/dev/null 2>&1; then
-	echo 'Session.vim' >> ~/.gitignore
+  echo 'Session.vim' >> ~/.gitignore
+fi
+
+echo 'Neovim config installed to ~/.config/nvim/'
+echo 'Open nvim — lazy.nvim will auto-install plugins on first launch'
+
+# LSP servers
+echo ''
+echo 'Installing LSP servers...'
+
+# typescript-language-server
+if command -v npm >/dev/null 2>&1; then
+  npm install -g typescript-language-server typescript
+else
+  echo '!! npm not found — skipping typescript-language-server'
+  echo '!! install npm then: npm install -g typescript-language-server typescript'
+fi
+
+# clangd (C/C++)
+if ! command -v clangd >/dev/null 2>&1; then
+  if command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get install -y clangd
+  elif command -v brew >/dev/null 2>&1; then
+    brew install llvm
+  else
+    echo '!! no package manager found — install clangd manually'
+  fi
+else
+  echo 'clangd already installed'
+fi
+
+# rust-analyzer
+if command -v rustup >/dev/null 2>&1; then
+  rustup component add rust-analyzer
+elif command -v cargo >/dev/null 2>&1; then
+  cargo install rust-analyzer
+else
+  echo '!! rustup not found — skipping rust-analyzer'
+  echo '!! install rustup then: rustup component add rust-analyzer'
 fi
