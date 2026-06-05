@@ -1,7 +1,7 @@
 require('lazy').setup({
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.8',
+    branch = 'master',
     dependencies = { 'nvim-lua/plenary.nvim' },
     keys = {
       { '<C-p>', '<cmd>Telescope find_files<cr>' },
@@ -61,6 +61,8 @@ require('lazy').setup({
       panel = { enabled = false },
     },
   },
+
+  { 'tpope/vim-sleuth' },
 
   {
     'nvim-lualine/lualine.nvim',
