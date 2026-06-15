@@ -25,6 +25,15 @@ mkdir -p ~/.config/nvim
 rm -f ~/.config/nvim/init.vim
 cp -r nvim/. ~/.config/nvim/
 
+# Copilot is optional and disabled by default; enable with: ./install.sh copilot
+if [ "$1" = "copilot" ]; then
+  touch ~/.config/nvim/copilot.enabled
+  echo 'Copilot enabled'
+else
+  rm -f ~/.config/nvim/copilot.enabled
+  echo 'Copilot disabled (enable with: ./install.sh copilot)'
+fi
+
 if ! grep 'Session.vim' ~/.gitignore >/dev/null 2>&1; then
   echo 'Session.vim' >> ~/.gitignore
 fi

@@ -45,8 +45,8 @@ require('lazy').setup({
 
   {
     'zbirenbaum/copilot.lua',
-    -- Optional; disabled by default. Opt in once at setup time:
-    --   touch ~/.config/nvim/copilot.enabled
+    -- Optional; disabled by default. Enable at install time:
+    --   ./install.sh copilot
     enabled = vim.uv.fs_stat(vim.fn.stdpath('config') .. '/copilot.enabled') ~= nil,
     cmd = 'Copilot',
     event = 'InsertEnter',
