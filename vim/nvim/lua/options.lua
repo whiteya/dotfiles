@@ -16,6 +16,7 @@ vim.opt.mouse = 'a'
 vim.opt.hidden = true
 vim.opt.splitright = true
 vim.opt.showtabline = 2
+vim.opt.termguicolors = true
 
 vim.opt.backup = true
 vim.opt.backupdir = vim.fn.expand('~/vimfiles/backup/')
