@@ -51,25 +51,35 @@ require('lazy').setup({
     'saghen/blink.cmp',
     version = '*',
     lazy = false,
-    dependencies = {
-      { 'giuxtaposition/blink-cmp-copilot', commit = '439cff78780c033aa23cf061d7315314b347e3c1' },
-    },
-    opts = {
-      keymap = { preset = 'super-tab' },
-      appearance = { nerd_font_variant = 'mono' },
-      sources = {
-        default = { 'copilot', 'lsp', 'path', 'snippets', 'buffer' },
-        providers = {
-          copilot = {
-            name = 'copilot',
-            module = 'blink-cmp-copilot',
-            score_offset = 100,
-            async = true,
+    dependencies = (function()
+      local deps = {}
+      if vim.uv.fs_stat(vim.fn.stdpath('config') .. '/copilot.enabled') then
+        table.insert(deps, { 'giuxtaposition/blink-cmp-copilot', commit = '439cff78780c033aa23cf061d7315314b347e3c1' })
+      end
+      return deps
+    end)(),
+    opts = function()
+      local copilot_enabled = vim.uv.fs_stat(vim.fn.stdpath('config') .. '/copilot.enabled') ~= nil
+      local default = copilot_enabled
+        and { 'copilot', 'lsp', 'path', 'snippets', 'buffer' }
+        or { 'lsp', 'path', 'snippets', 'buffer' }
+      return {
+        keymap = { preset = 'super-tab' },
+        appearance = { nerd_font_variant = 'mono' },
+        sources = {
+          default = default,
+          providers = {
+            copilot = {
+              name = 'copilot',
+              module = 'blink-cmp-copilot',
+              score_offset = 100,
+              async = true,
+            },
           },
         },
-      },
-      signature = { enabled = true },
-    },
+        signature = { enabled = true },
+      }
+    end,
   },
 
   {
