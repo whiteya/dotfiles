@@ -19,11 +19,22 @@ require('lazy').setup({
     'saghen/blink.cmp',
     version = '*',
     lazy = false,
+    dependencies = {
+      { 'giuxtaposition/blink-cmp-copilot', commit = '439cff78780c033aa23cf061d7315314b347e3c1' },
+    },
     opts = {
-      keymap = { preset = 'default' },
+      keymap = { preset = 'super-tab' },
       appearance = { nerd_font_variant = 'mono' },
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'copilot', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          copilot = {
+            name = 'copilot',
+            module = 'blink-cmp-copilot',
+            score_offset = 100,
+            async = true,
+          },
+        },
       },
       signature = { enabled = true },
     },
@@ -51,16 +62,9 @@ require('lazy').setup({
     cmd = 'Copilot',
     event = 'InsertEnter',
     opts = {
-      suggestion = {
-        enabled = true,
-        auto_trigger = true,
-        keymap = {
-          accept = '<M-l>',
-          next = '<M-]>',
-          prev = '<M-[>',
-          dismiss = '<C-]>',
-        },
-      },
+      -- Inline suggestions disabled; Copilot is surfaced through blink.cmp
+      -- (blink-cmp-copilot) and accepted via <Tab>.
+      suggestion = { enabled = false },
       panel = { enabled = false },
     },
   },
