@@ -45,5 +45,5 @@ vim.opt.signcolumn = 'yes'
 
 vim.opt.wildignore:append('*/node_modules/*,*.swp,*.zip,*.exe')
 
-vim.cmd('colorscheme unokai')
-vim.api.nvim_set_hl(0, 'LineNr', { ctermfg = 'darkgrey', fg = '#606060' })
+-- Colorscheme is set in plugins.lua after lazy.setup() so plugin themes
+-- (catppuccin/tokyonight) are loaded first.

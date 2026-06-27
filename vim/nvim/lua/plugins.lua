@@ -1,5 +1,20 @@
 require('lazy').setup({
   {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    commit = 'e068ab5f8261f23f6f71ffd8791ae40315b77b9c',
+    lazy = false,
+    priority = 1000,
+  },
+
+  {
+    'folke/tokyonight.nvim',
+    commit = 'cdc07ac78467a233fd62c493de29a17e0cf2b2b6',
+    lazy = false,
+    priority = 1000,
+  },
+
+  {
     'nvim-telescope/telescope.nvim',
     commit = '427b576c16792edad01a92b89721d923c19ad60f',
     dependencies = { 'nvim-lua/plenary.nvim', 'folke/trouble.nvim' },
@@ -214,3 +229,8 @@ require('lazy').setup({
     },
   },
 })
+
+-- Active colorscheme (themes loaded above). Swap to 'tokyonight' (or
+-- 'tokyonight-night', 'tokyonight-storm', etc.) to switch.
+vim.cmd('colorscheme catppuccin')
+vim.api.nvim_set_hl(0, 'LineNr', { ctermfg = 'darkgrey', fg = '#606060' })
