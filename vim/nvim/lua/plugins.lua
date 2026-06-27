@@ -59,13 +59,26 @@ require('lazy').setup({
     -- Optional; disabled by default. Enable at install time:
     --   ./install.sh copilot
     enabled = vim.uv.fs_stat(vim.fn.stdpath('config') .. '/copilot.enabled') ~= nil,
+    dependencies = { 'copilotlsp-nvim/copilot-lsp' },
     cmd = 'Copilot',
     event = 'InsertEnter',
+    init = function()
+      vim.g.copilot_nes_debounce = 500
+    end,
     opts = {
       -- Inline suggestions disabled; Copilot is surfaced through blink.cmp
       -- (blink-cmp-copilot) and accepted via <Tab>.
       suggestion = { enabled = false },
       panel = { enabled = false },
+      -- Next Edit Suggestions (NES) via copilot-lsp.
+      nes = {
+        enabled = true,
+        keymap = {
+          accept_and_goto = '<leader>p',
+          accept = false,
+          dismiss = '<Esc>',
+        },
+      },
     },
   },
 
