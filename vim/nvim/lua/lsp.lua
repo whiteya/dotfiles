@@ -43,8 +43,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', 'gi', '<cmd>Trouble lsp_implementations toggle focus=true<cr>', opts)
+    vim.keymap.set('n', 'gr', '<cmd>Trouble lsp_references toggle focus=true<cr>', opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>f', vim.lsp.buf.format, opts)
@@ -55,7 +55,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '[g', function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
     vim.keymap.set('n', ']g', function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
     vim.keymap.set('n', '<space>a', vim.diagnostic.setloclist, opts)
-    vim.keymap.set('n', '<space>o', '<cmd>lua vim.lsp.buf.document_symbol()<cr>', opts)
+    vim.keymap.set('n', '<space>o', '<cmd>Trouble symbols toggle focus=true<cr>', opts)
     vim.keymap.set('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<cr>', opts)
   end,
 })

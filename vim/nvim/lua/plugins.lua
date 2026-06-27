@@ -2,7 +2,7 @@ require('lazy').setup({
   {
     'nvim-telescope/telescope.nvim',
     commit = '427b576c16792edad01a92b89721d923c19ad60f',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim', 'folke/trouble.nvim' },
     keys = {
       { '<C-p>', '<cmd>Telescope find_files<cr>' },
       { '<leader>fg', '<cmd>Telescope live_grep<cr>' },
@@ -11,6 +11,10 @@ require('lazy').setup({
     opts = {
       defaults = {
         file_ignore_patterns = { 'node_modules', '%.swp', '%.zip', '%.exe' },
+        mappings = {
+          i = { ['<c-t>'] = function(...) return require('trouble.sources.telescope').open(...) end },
+          n = { ['<c-t>'] = function(...) return require('trouble.sources.telescope').open(...) end },
+        },
       },
     },
   },
@@ -109,15 +113,23 @@ require('lazy').setup({
   {
     'nvim-lualine/lualine.nvim',
     commit = '221ce6b2d999187044529f49da6554a92f740a96',
-    opts = {
-      options = {
-        theme = 'auto',
-        globalstatus = true,
-      },
-      sections = {
+    dependencies = { 'folke/trouble.nvim' },
+    opts = function(_, opts)
+      opts.options = { theme = 'auto', globalstatus = true }
+      opts.sections = {
         lualine_b = { 'branch', 'diff', 'diagnostics' },
-      },
-    },
+        lualine_c = { 'filename' },
+      }
+      local symbols = require('trouble').statusline({
+        mode = 'symbols',
+        groups = {},
+        title = false,
+        filter = { range = true },
+        format = '{kind_icon}{symbol.name:Normal}',
+        hl_group = 'lualine_c_normal',
+      })
+      table.insert(opts.sections.lualine_c, { symbols.get, cond = symbols.has })
+    end,
   },
 
   {
@@ -150,6 +162,55 @@ require('lazy').setup({
         -- Toggles
         map('n', '<leader>tb', gs.toggle_current_line_blame, 'Toggle line blame')
       end,
+    },
+  },
+
+  {
+    'folke/which-key.nvim',
+    commit = '3aab2147e74890957785941f0c1ad87d0a44c15a',
+    event = 'VeryLazy',
+    opts = {},
+    keys = {
+      {
+        '<leader>?',
+        function() require('which-key').show({ global = false }) end,
+        desc = 'Buffer local keymaps',
+      },
+    },
+  },
+
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    commit = '1b4c40051f2623d0a7dcf19d5b74b997b97b0a9a',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons',
+      { 'MunifTanjim/nui.nvim', commit = 'de740991c12411b663994b2860f1a4fd0937c130' },
+    },
+    cmd = 'Neotree',
+    opts = {
+      close_if_last_window = true,
+      filesystem = {
+        follow_current_file = { enabled = true },
+        use_libuv_file_watcher = true,
+      },
+    },
+    keys = {
+      { '<leader>e', '<cmd>Neotree toggle<cr>', desc = 'Toggle file explorer' },
+    },
+  },
+
+  {
+    'folke/trouble.nvim',
+    commit = 'bd67efe408d4816e25e8491cc5ad4088e708a69a',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    cmd = 'Trouble',
+    opts = {},
+    keys = {
+      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics (Trouble)' },
+      { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer diagnostics (Trouble)' },
+      { '<leader>xq', '<cmd>Trouble qflist toggle<cr>', desc = 'Quickfix (Trouble)' },
+      { '<leader>xl', '<cmd>Trouble loclist toggle<cr>', desc = 'Location list (Trouble)' },
     },
   },
 })
