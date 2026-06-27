@@ -1,7 +1,7 @@
 require('lazy').setup({
   {
     'nvim-telescope/telescope.nvim',
-    branch = 'master',
+    commit = '427b576c16792edad01a92b89721d923c19ad60f',
     dependencies = { 'nvim-lua/plenary.nvim' },
     keys = {
       { '<C-p>', '<cmd>Telescope find_files<cr>' },
@@ -65,11 +65,11 @@ require('lazy').setup({
     },
   },
 
-  { 'tpope/vim-sleuth' },
+  { 'tpope/vim-sleuth', commit = 'be69bff86754b1aa5adcbb527d7fcd1635a84080' },
 
   {
     'akinsho/bufferline.nvim',
-    version = '*',
+    commit = '655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VeryLazy',
     opts = {
@@ -91,6 +91,7 @@ require('lazy').setup({
 
   {
     'nvim-lualine/lualine.nvim',
+    commit = '221ce6b2d999187044529f49da6554a92f740a96',
     opts = {
       options = {
         theme = 'auto',
@@ -104,6 +105,7 @@ require('lazy').setup({
 
   {
     'lewis6991/gitsigns.nvim',
+    commit = '2038c666bd9d8a0b7349a0b6ee00dc83104b9ecf',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       current_line_blame = true,
