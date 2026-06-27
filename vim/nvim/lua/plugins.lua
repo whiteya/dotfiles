@@ -5,6 +5,19 @@ require('lazy').setup({
     commit = 'e068ab5f8261f23f6f71ffd8791ae40315b77b9c',
     lazy = false,
     priority = 1000,
+    opts = {
+      integrations = {
+        telescope = true,
+        which_key = true,
+        gitsigns = true,
+        neotree = true,
+        lsp_trouble = true,
+        blink_cmp = true,
+        lualine = true,
+        treesitter = true,
+        native_lsp = { enabled = true },
+      },
+    },
   },
 
   {
@@ -111,8 +124,7 @@ require('lazy').setup({
     opts = {
       options = {
         diagnostics = 'nvim_lsp',
-        separator_style = 'slant',
-        indicator = { style = 'underline' },
+        separator_style = 'thin',
         show_buffer_close_icons = false,
         show_close_icon = false,
       },

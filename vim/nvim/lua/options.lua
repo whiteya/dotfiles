@@ -37,6 +37,7 @@ vim.opt.breakindentopt = 'shift:2,sbr'
 vim.opt.linebreak = true
 vim.opt.showbreak = '↪ '
 vim.opt.listchars = { tab = '» ', eol = '↲', nbsp = '␣', trail = '•', extends = '⟩', precedes = '⟨' }
+vim.opt.fillchars:append({ eob = ' ' })
 
 vim.opt.scrolloff = 5
 vim.opt.updatetime = 700

@@ -9,6 +9,13 @@ vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
   callback = function() vim.cmd('silent! update') end,
 })
 
+-- Reload files changed on disk (autoread only re-reads when nvim checks)
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
+  callback = function()
+    if vim.fn.mode() ~= 'c' then vim.cmd('silent! checktime') end
+  end,
+})
+
 -- Terminal
 vim.keymap.set('t', 'kj', '<C-\\><C-n>')
 vim.keymap.set('t', '<C-W>', '<C-\\><C-n><C-W>')
