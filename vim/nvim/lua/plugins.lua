@@ -99,10 +99,6 @@ require('lazy').setup({
       sections = {
         lualine_b = { 'branch', 'diff', 'diagnostics' },
       },
-      tabline = {
-        lualine_a = { 'buffers' },
-        lualine_z = { 'tabs' },
-      },
     },
   },
 
