@@ -38,11 +38,15 @@ require('lazy').setup({
     },
     opts = {
       defaults = {
-        file_ignore_patterns = { 'node_modules', '%.swp', '%.zip', '%.exe' },
+        file_ignore_patterns = { 'node_modules', '%.swp', '%.zip', '%.exe', '%.git/' },
         mappings = {
           i = { ['<c-t>'] = function(...) return require('trouble.sources.telescope').open(...) end },
           n = { ['<c-t>'] = function(...) return require('trouble.sources.telescope').open(...) end },
         },
+      },
+      pickers = {
+        find_files = { hidden = true },
+        live_grep = { additional_args = { '--hidden' } },
       },
     },
   },
@@ -89,7 +93,7 @@ require('lazy').setup({
       local ok, configs = pcall(require, 'nvim-treesitter.configs')
       if not ok then return end
       configs.setup({
-        ensure_installed = { 'typescript', 'tsx', 'javascript', 'c', 'cpp', 'rust', 'lua', 'vim', 'vimdoc' },
+        ensure_installed = { 'typescript', 'tsx', 'javascript', 'c', 'cpp', 'rust', 'python', 'lua', 'vim', 'vimdoc' },
         highlight = { enable = true },
         indent = { enable = true },
       })
@@ -137,6 +141,14 @@ require('lazy').setup({
         separator_style = 'thin',
         show_buffer_close_icons = false,
         show_close_icon = false,
+        offsets = {
+          {
+            filetype = 'neo-tree',
+            text = '',
+            highlight = 'Directory',
+            text_align = 'left',
+          },
+        },
       },
     },
     keys = {
@@ -230,6 +242,10 @@ require('lazy').setup({
       filesystem = {
         follow_current_file = { enabled = true },
         use_libuv_file_watcher = true,
+        filtered_items = {
+          hide_dotfiles = false,
+          hide_gitignored = false,
+        },
       },
     },
     keys = {
