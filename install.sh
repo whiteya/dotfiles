@@ -3,5 +3,5 @@
 cd $(dirname $0)
 
 ./git.sh
-./vim/install.sh
+./vim/install.sh "$@"
 ./tmux/install.sh

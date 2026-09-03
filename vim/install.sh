@@ -75,3 +75,11 @@ else
   echo '!! rustup not found — skipping rust-analyzer'
   echo '!! install rustup then: rustup component add rust-analyzer'
 fi
+
+# pyright (Python)
+if command -v npm >/dev/null 2>&1; then
+  npm install -g pyright
+else
+  echo '!! npm not found — skipping pyright'
+  echo '!! install npm then: npm install -g pyright'
+fi

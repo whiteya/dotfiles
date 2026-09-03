@@ -25,6 +25,20 @@ local servers = {
     filetypes = { 'rust' },
     root_markers = { 'Cargo.toml', '.git' },
   },
+  {
+    name = 'csharp_ls',
+    exe = 'csharp-ls',
+    cmd = { 'csharp-ls' },
+    filetypes = { 'cs' },
+    root_markers = { '*.sln', '*.csproj', '.git' },
+  },
+  {
+    name = 'pyright',
+    exe = 'pyright-langserver',
+    cmd = { 'pyright-langserver', '--stdio' },
+    filetypes = { 'python' },
+    root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
+  },
 }
 
 for _, server in ipairs(servers) do
