@@ -72,7 +72,13 @@ require('lazy').setup({
         appearance = { nerd_font_variant = 'mono' },
         sources = {
           default = default,
+          per_filetype = { lua = { inherit_defaults = true, 'lazydev' } },
           providers = {
+            lazydev = {
+              name = 'LazyDev',
+              module = 'lazydev.integrations.blink',
+              score_offset = 100,
+            },
             copilot = {
               name = 'copilot',
               module = 'blink-cmp-copilot',
@@ -88,17 +94,32 @@ require('lazy').setup({
 
   {
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
     build = ':TSUpdate',
     config = function()
-      local ok, configs = pcall(require, 'nvim-treesitter.configs')
-      if not ok then return end
-      configs.setup({
-        ensure_installed = { 'typescript', 'tsx', 'javascript', 'c', 'cpp', 'rust', 'python', 'lua', 'vim', 'vimdoc' },
-        highlight = { enable = true },
-        indent = { enable = true },
+      -- Parser installs need the tree-sitter CLI; nvim bundles c, lua, vim, vimdoc, markdown and query
+      if vim.fn.executable('tree-sitter') == 1 then
+        require('nvim-treesitter').install({
+          'typescript', 'tsx', 'javascript', 'c', 'cpp', 'rust', 'python', 'c_sharp', 'lua', 'vim', 'vimdoc',
+          'json', 'yaml', 'html', 'css', 'markdown', 'markdown_inline', 'bash', 'toml',
+        })
+      end
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(ev)
+          if pcall(vim.treesitter.start, ev.buf) then
+            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
       })
     end,
   },
+
+  { 'neovim/nvim-lspconfig', lazy = false },
+  { 'b0o/SchemaStore.nvim', lazy = true },
+  { 'folke/lazydev.nvim', ft = 'lua', opts = {} },
+
+  { 'windwp/nvim-autopairs', event = 'InsertEnter', opts = {} },
+  { 'kylechui/nvim-surround', event = 'VeryLazy', opts = {} },
 
   {
     'zbirenbaum/copilot.lua',

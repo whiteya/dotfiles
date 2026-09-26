@@ -1,54 +1,26 @@
--- Set blink.cmp capabilities for all LSP servers (native 0.11+ API)
-vim.lsp.config('*', {
-  capabilities = require('blink.cmp').get_lsp_capabilities(),
+-- Server definitions come from nvim-lspconfig's lsp/*.lua; blink.cmp adds its capabilities itself
+vim.lsp.config('jsonls', {
+  before_init = function(_, config)
+    config.settings.json.schemas = require('schemastore').json.schemas()
+  end,
+  settings = { json = { validate = { enable = true } } },
+})
+vim.lsp.config('yamlls', {
+  before_init = function(_, config)
+    config.settings.yaml.schemas = require('schemastore').yaml.schemas()
+  end,
+  settings = { yaml = { schemaStore = { enable = false, url = '' } } },
 })
 
 local servers = {
-  {
-    name = 'ts_ls',
-    exe = 'typescript-language-server',
-    cmd = { 'typescript-language-server', '--stdio' },
-    filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
-    root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
-  },
-  {
-    name = 'clangd',
-    exe = 'clangd',
-    cmd = { 'clangd' },
-    filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
-    root_markers = { 'compile_commands.json', 'compile_flags.txt', '.git' },
-  },
-  {
-    name = 'rust_analyzer',
-    exe = 'rust-analyzer',
-    cmd = { 'rust-analyzer' },
-    filetypes = { 'rust' },
-    root_markers = { 'Cargo.toml', '.git' },
-  },
-  {
-    name = 'csharp_ls',
-    exe = 'csharp-ls',
-    cmd = { 'csharp-ls' },
-    filetypes = { 'cs' },
-    root_markers = { '*.sln', '*.csproj', '.git' },
-  },
-  {
-    name = 'pyright',
-    exe = 'pyright-langserver',
-    cmd = { 'pyright-langserver', '--stdio' },
-    filetypes = { 'python' },
-    root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
-  },
+  'ts_ls', 'clangd', 'rust_analyzer', 'csharp_ls', 'pyright', 'lua_ls',
+  'jsonls', 'yamlls', 'html', 'cssls', 'marksman', 'bashls', 'taplo',
 }
 
-for _, server in ipairs(servers) do
-  vim.lsp.config(server.name, {
-    cmd = server.cmd,
-    filetypes = server.filetypes,
-    root_markers = server.root_markers,
-  })
-  if vim.fn.executable(server.exe) == 1 then
-    vim.lsp.enable(server.name)
+for _, name in ipairs(servers) do
+  local cmd = vim.lsp.config[name].cmd
+  if type(cmd) ~= 'table' or vim.fn.executable(cmd[1]) == 1 then
+    vim.lsp.enable(name)
   end
 end
 

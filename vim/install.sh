@@ -1,15 +1,13 @@
 #!/bin/sh
 cd $(dirname $0)
 
-mkdir -p ~/vimfiles/backup
-mkdir -p ~/vimfiles/undo
-
 if ! grep 'EDITOR=vim' ~/.bash_aliases >/dev/null 2>&1; then
   echo 'export EDITOR=vim' >> ~/.bash_aliases
 fi
 
 if [ "$1" = "basic" ]; then
   # Minimal vim-compatible install — no plugins
+  mkdir -p ~/vimfiles/backup ~/vimfiles/undo
   cp basic.vimrc ~/.vimrc
   echo 'Basic vim config installed to ~/.vimrc'
   exit 0
