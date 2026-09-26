@@ -70,6 +70,6 @@ echo 'Neovim config linked into ~/.config/nvim/'
 # npm-based tools need node; csharp-ls and csharpier are only installed when dotnet is present.
 if command -v nvim >/dev/null 2>&1; then
   echo 'Installing plugins, language servers and formatters...'
-  nvim --headless '+Lazy! install' '+MasonToolsInstallSync' +qa
+  nvim --headless '+Lazy! restore' '+MasonToolsInstallSync' +qa
   echo ''
 fi

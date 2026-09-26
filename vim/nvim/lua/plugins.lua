@@ -2,7 +2,6 @@ require('lazy').setup({
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    commit = 'e068ab5f8261f23f6f71ffd8791ae40315b77b9c',
     lazy = false,
     priority = 1000,
     opts = {
@@ -22,14 +21,12 @@ require('lazy').setup({
 
   {
     'folke/tokyonight.nvim',
-    commit = 'cdc07ac78467a233fd62c493de29a17e0cf2b2b6',
     lazy = false,
     priority = 1000,
   },
 
   {
     'nvim-telescope/telescope.nvim',
-    commit = '427b576c16792edad01a92b89721d923c19ad60f',
     dependencies = { 'nvim-lua/plenary.nvim', 'folke/trouble.nvim' },
     keys = {
       { '<C-p>', '<cmd>Telescope find_files<cr>' },
@@ -58,7 +55,7 @@ require('lazy').setup({
     dependencies = (function()
       local deps = {}
       if vim.uv.fs_stat(vim.fn.stdpath('config') .. '/copilot.enabled') then
-        table.insert(deps, { 'giuxtaposition/blink-cmp-copilot', commit = '439cff78780c033aa23cf061d7315314b347e3c1' })
+        table.insert(deps, 'giuxtaposition/blink-cmp-copilot')
       end
       return deps
     end)(),
@@ -234,11 +231,10 @@ require('lazy').setup({
     },
   },
 
-  { 'tpope/vim-sleuth', commit = 'be69bff86754b1aa5adcbb527d7fcd1635a84080' },
+  'tpope/vim-sleuth',
 
   {
     'akinsho/bufferline.nvim',
-    commit = '655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VeryLazy',
     opts = {
@@ -267,7 +263,6 @@ require('lazy').setup({
 
   {
     'nvim-lualine/lualine.nvim',
-    commit = '221ce6b2d999187044529f49da6554a92f740a96',
     dependencies = { 'folke/trouble.nvim' },
     opts = function(_, opts)
       opts.options = { theme = 'auto', globalstatus = true }
@@ -289,7 +284,6 @@ require('lazy').setup({
 
   {
     'lewis6991/gitsigns.nvim',
-    commit = '2038c666bd9d8a0b7349a0b6ee00dc83104b9ecf',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       current_line_blame = true,
@@ -322,7 +316,6 @@ require('lazy').setup({
 
   {
     'folke/which-key.nvim',
-    commit = '3aab2147e74890957785941f0c1ad87d0a44c15a',
     event = 'VeryLazy',
     opts = {},
     keys = {
@@ -336,11 +329,10 @@ require('lazy').setup({
 
   {
     'nvim-neo-tree/neo-tree.nvim',
-    commit = '1b4c40051f2623d0a7dcf19d5b74b997b97b0a9a',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
-      { 'MunifTanjim/nui.nvim', commit = 'de740991c12411b663994b2860f1a4fd0937c130' },
+      'MunifTanjim/nui.nvim',
     },
     cmd = 'Neotree',
     opts = {
@@ -361,7 +353,6 @@ require('lazy').setup({
 
   {
     'folke/trouble.nvim',
-    commit = 'bd67efe408d4816e25e8491cc5ad4088e708a69a',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     cmd = 'Trouble',
     opts = {},
