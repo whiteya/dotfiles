@@ -1,6 +1,5 @@
 vim.keymap.set('i', 'kj', '<esc>')
 vim.keymap.set('v', '//', 'y/\\V<C-R>=escape(@",\'/\\\')<CR><CR>')
-vim.keymap.set('n', '<space>', 'i_<esc>r')
 vim.keymap.set({ 'n', 'v' }, '<up>', 'g<up>')
 vim.keymap.set({ 'n', 'v' }, '<down>', 'g<down>')
 vim.keymap.set('n', 'g=', 'gg=G``')

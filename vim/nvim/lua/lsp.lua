@@ -29,11 +29,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', 'gi', '<cmd>Trouble lsp_implementations toggle focus=true<cr>', opts)
-    vim.keymap.set('n', 'gr', '<cmd>Trouble lsp_references toggle focus=true<cr>', opts)
+    vim.keymap.set('n', 'gri', '<cmd>Trouble lsp_implementations toggle focus=true<cr>', opts)
+    vim.keymap.set('n', 'grr', '<cmd>Trouble lsp_references toggle focus=true<cr>', opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'v' }, '<leader>f', vim.lsp.buf.format, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>a', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<leader>qf', function()
       vim.lsp.buf.code_action({ apply = true, context = { only = { 'quickfix' } } })

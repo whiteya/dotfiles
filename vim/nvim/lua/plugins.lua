@@ -114,9 +114,94 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'mason-org/mason.nvim',
+    lazy = false,
+    priority = 900,
+    opts = {},
+  },
+  {
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+    dependencies = { 'mason-org/mason.nvim' },
+    cmd = { 'MasonToolsInstall', 'MasonToolsInstallSync', 'MasonToolsUpdate', 'MasonToolsUpdateSync', 'MasonToolsClean' },
+    opts = function()
+      local tools = {
+        'typescript-language-server', 'clangd', 'rust-analyzer', 'pyright', 'lua-language-server',
+        'json-lsp', 'yaml-language-server', 'html-lsp', 'css-lsp', 'marksman', 'bash-language-server', 'taplo',
+        'prettier', 'stylua', 'ruff', 'clang-format', 'shfmt', 'shellcheck', 'tree-sitter-cli',
+      }
+      if vim.fn.executable('dotnet') == 1 then
+        vim.list_extend(tools, { 'csharp-language-server', 'csharpier' })
+      end
+      -- Installed by vim/install.sh or :MasonToolsInstall rather than on every startup
+      return { ensure_installed = tools, run_on_start = false }
+    end,
+  },
+
   { 'neovim/nvim-lspconfig', lazy = false },
   { 'b0o/SchemaStore.nvim', lazy = true },
   { 'folke/lazydev.nvim', ft = 'lua', opts = {} },
+
+  {
+    'stevearc/conform.nvim',
+    cmd = 'ConformInfo',
+    opts = {
+      formatters_by_ft = {
+        lua = { 'stylua' },
+        python = { 'ruff_format' },
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        json = { 'prettier' },
+        yaml = { 'prettier' },
+        html = { 'prettier' },
+        css = { 'prettier' },
+        markdown = { 'prettier' },
+        c = { 'clang-format' },
+        cpp = { 'clang-format' },
+        rust = { 'rustfmt' },
+        cs = { 'csharpier' },
+        sh = { 'shfmt' },
+        bash = { 'shfmt' },
+        toml = { 'taplo' },
+      },
+      default_format_opts = { lsp_format = 'fallback' },
+    },
+    keys = {
+      {
+        '<leader>=',
+        function()
+          local hunks = require('gitsigns').get_hunks()
+          if not hunks or #hunks == 0 then
+            vim.notify('No changed lines to format')
+            return
+          end
+          -- Bottom-up so formatting a hunk doesn't shift the ones above it
+          for i = #hunks, 1, -1 do
+            local added = hunks[i].added
+            if added.count > 0 then
+              local last = added.start + added.count - 1
+              local len = #vim.api.nvim_buf_get_lines(0, last - 1, last, true)[1]
+              require('conform').format({ range = { start = { added.start, 0 }, ['end'] = { last, len } } })
+            end
+          end
+        end,
+        desc = 'Format changed lines',
+      },
+      { '<leader>=', function() require('conform').format() end, mode = 'v', desc = 'Format selection' },
+    },
+  },
+
+  {
+    'NeogitOrg/neogit',
+    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope.nvim' },
+    cmd = 'Neogit',
+    opts = {},
+    keys = {
+      { '<leader>gg', '<cmd>Neogit<cr>', desc = 'Neogit' },
+    },
+  },
 
   { 'windwp/nvim-autopairs', event = 'InsertEnter', opts = {} },
   { 'kylechui/nvim-surround', event = 'VeryLazy', opts = {} },

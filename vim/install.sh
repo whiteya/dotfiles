@@ -65,47 +65,11 @@ if ! grep -qx 'Session.vim' "$GIT_IGNORE" 2>/dev/null; then
 fi
 
 echo 'Neovim config linked into ~/.config/nvim/'
-echo 'Open nvim — lazy.nvim will auto-install plugins on first launch'
 
-# LSP servers
-echo ''
-echo 'Installing LSP servers...'
-
-# typescript-language-server
-if command -v npm >/dev/null 2>&1; then
-  npm install -g typescript-language-server typescript
-else
-  echo '!! npm not found — skipping typescript-language-server'
-  echo '!! install npm then: npm install -g typescript-language-server typescript'
-fi
-
-# clangd (C/C++)
-if ! command -v clangd >/dev/null 2>&1; then
-  if command -v apt-get >/dev/null 2>&1; then
-    sudo apt-get install -y clangd
-  elif command -v brew >/dev/null 2>&1; then
-    brew install llvm
-  else
-    echo '!! no package manager found — install clangd manually'
-  fi
-else
-  echo 'clangd already installed'
-fi
-
-# rust-analyzer
-if command -v rustup >/dev/null 2>&1; then
-  rustup component add rust-analyzer
-elif command -v cargo >/dev/null 2>&1; then
-  cargo install rust-analyzer
-else
-  echo '!! rustup not found — skipping rust-analyzer'
-  echo '!! install rustup then: rustup component add rust-analyzer'
-fi
-
-# pyright (Python)
-if command -v npm >/dev/null 2>&1; then
-  npm install -g pyright
-else
-  echo '!! npm not found — skipping pyright'
-  echo '!! install npm then: npm install -g pyright'
+# Language servers, formatters and tree-sitter CLI via mason (see mason-tool-installer in plugins.lua).
+# npm-based tools need node; csharp-ls and csharpier are only installed when dotnet is present.
+if command -v nvim >/dev/null 2>&1; then
+  echo 'Installing plugins, language servers and formatters...'
+  nvim --headless '+Lazy! install' '+MasonToolsInstallSync' +qa
+  echo ''
 fi
