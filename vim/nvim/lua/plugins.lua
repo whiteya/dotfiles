@@ -268,7 +268,9 @@ require('lazy').setup({
   },
 })
 
--- Active colorscheme (themes loaded above). Swap to 'tokyonight' (or
--- 'tokyonight-night', 'tokyonight-storm', etc.) to switch.
-vim.cmd('colorscheme catppuccin')
-vim.api.nvim_set_hl(0, 'LineNr', { ctermfg = 'darkgrey', fg = '#606060' })
+-- colors/matugen.lua is generated per-machine by matugen from the wallpaper
+-- and is not tracked; fall back to catppuccin where it doesn't exist.
+if not pcall(vim.cmd.colorscheme, 'matugen') then
+  vim.cmd('colorscheme catppuccin')
+  vim.api.nvim_set_hl(0, 'LineNr', { ctermfg = 'darkgrey', fg = '#606060' })
+end

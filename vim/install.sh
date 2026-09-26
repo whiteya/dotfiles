@@ -21,9 +21,35 @@ if ! command -v nvim >/dev/null 2>&1; then
   echo '!! CONTINUING ANYWAY' >&2
 fi
 
-mkdir -p ~/.config/nvim
-rm -f ~/.config/nvim/init.vim
-cp -r nvim/. ~/.config/nvim/
+if ! command -v stow >/dev/null 2>&1; then
+  echo '!! stow not found (debian: sudo apt-get install stow, arch: sudo pacman -S stow)' >&2
+  exit 1
+fi
+
+NVIM_DIR=~/.config/nvim
+
+# Must be a real directory: if stow folds it into a symlink, lazy-lock.json,
+# colors/ and copilot.enabled get written into this repo.
+mkdir -p "$NVIM_DIR"
+rm -f "$NVIM_DIR/init.vim"
+
+# Move aside plain copies left by the old cp-based install so stow can link over them
+backup="$HOME/.config/nvim.pre-stow.$(date +%Y%m%d%H%M%S)"
+moved=
+for f in $(cd nvim && find . -type f); do
+  t="$NVIM_DIR/$f"
+  if [ -f "$t" ] && [ ! -L "$t" ] && [ "$(readlink -f "$t")" != "$(readlink -f "nvim/$f")" ]; then
+    mkdir -p "$backup/$(dirname "$f")"
+    mv "$t" "$backup/$f"
+    moved=1
+  fi
+done
+for d in $(cd nvim && find . -mindepth 1 -type d | sort -r); do
+  [ -L "$NVIM_DIR/$d" ] || rmdir "$NVIM_DIR/$d" 2>/dev/null
+done
+[ -n "$moved" ] && echo "Old copied config moved to $backup"
+
+stow --restow -d "$(pwd)" -t "$NVIM_DIR" nvim || exit 1
 
 # Copilot is optional and disabled by default; enable with: ./install.sh copilot
 if [ "$1" = "copilot" ]; then
@@ -34,11 +60,13 @@ else
   echo 'Copilot disabled (enable with: ./install.sh copilot)'
 fi
 
-if ! grep 'Session.vim' ~/.gitignore >/dev/null 2>&1; then
-  echo 'Session.vim' >> ~/.gitignore
+GIT_IGNORE="${XDG_CONFIG_HOME:-$HOME/.config}/git/ignore"
+mkdir -p "$(dirname "$GIT_IGNORE")"
+if ! grep -qx 'Session.vim' "$GIT_IGNORE" 2>/dev/null; then
+  echo 'Session.vim' >> "$GIT_IGNORE"
 fi
 
-echo 'Neovim config installed to ~/.config/nvim/'
+echo 'Neovim config linked into ~/.config/nvim/'
 echo 'Open nvim — lazy.nvim will auto-install plugins on first launch'
 
 # LSP servers
