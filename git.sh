@@ -16,3 +16,5 @@ fi
 
 git config --global diff.tool nvim_difftool
 git config --global difftool.nvim_difftool.cmd 'nvim -c "packadd nvim.difftool" -c "DiffTool $LOCAL $REMOTE"'
+git config --global difftool.prompt false
+git config --global merge.tool nvimdiff
